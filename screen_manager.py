@@ -142,8 +142,8 @@ class ScreensManager:
             if len(accounts) == 0:  # if no accounts forces account creation
                 ScreensManager.create_account(current_session)
 
-            print('=== User Menu ===')
-            print(f'Welcome, {current_session.first_name}')
+            print('=== User Menu ===\n')
+            print(f'Welcome, {current_session.first_name}\n')
 
             for i, account in enumerate(accounts):
                 print(
@@ -153,7 +153,18 @@ class ScreensManager:
                        'Open new account', 'Logout of session']
             for i, option in enumerate(options):
                 print(f'{i + 1}. {option}')
-            choice = input('\nWhat would you like to do?')
+            choice = int(input('\nWhat would you like to do? '))
+            if choice == 1:
+                ScreensManager.deposit_menu(current_session)
+            if choice == 2:
+                ScreensManager.withdraw_menu(current_session)
+            if choice == 3:
+                ScreensManager.transfer_menu(current_session)
+            if choice == 4:
+                ScreensManager.create_account(current_session)
+            if choice == 5:
+                current_session = None
+                return
 
     @staticmethod
     def create_account(current_session):
@@ -182,13 +193,19 @@ class ScreensManager:
                 return
 
     @staticmethod
-    def deposit_menu():
-        pass
+    def deposit_menu(current_session):
+        while True:
+            input('deposit')
+            return
 
     @staticmethod
-    def withdraw_menu():
-        pass
+    def withdraw_menu(current_session):
+        while True:
+            input('withdraw')
+            return
 
     @staticmethod
-    def transfer_menu():
-        pass
+    def transfer_menu(current_session):
+        while True:
+            input('transfer')
+            return
