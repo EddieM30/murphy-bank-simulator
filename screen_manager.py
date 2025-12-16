@@ -185,23 +185,25 @@ class ScreensManager:
             if choice == 'n':
                 return
             if int(choice) == 1:
+                nickname = input('A nickname is needed for this account: ')
                 AccountsManager.create_account(
-                    current_session.user_id, 'checking')
+                    current_session.user_id, 'checking', nickname)
                 return
             if int(choice) == 2:
                 AccountsManager.create_account(
-                    current_session.user_id, 'savings')
+                    current_session.user_id, 'savings', nickname)
                 return
             if int(choice) == 3:
                 AccountsManager.create_account(
-                    current_session.user_id, 'credit')
+                    current_session.user_id, 'credit', nickname)
                 return
 
     @staticmethod
     def deposit_menu(current_session):
         while True:
-            input('deposit')
-            return
+            utils.clear_console()
+            print('=== DEPOSIT ===\n')
+            str_deposit_amount = input('')
 
     @staticmethod
     def withdraw_menu(current_session):

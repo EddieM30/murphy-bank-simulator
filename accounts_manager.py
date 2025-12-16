@@ -19,18 +19,19 @@ class AccountsManager():
             return accounts_list
 
     @staticmethod
-    def create_account(user_id: int, account_type: str) -> dict:
+    def create_account(user_id: int, account_type: str, nickname: str) -> dict:
         """Create one new account (checking, savings, etc.) one method infinitly extensible"""
         with get_connection() as conn:
             cur = conn.cursor()
-            cur.execute("INSERT INTO accounts (user_id, account_type, created_at) VALUES (?, ?, ?)",
-                        (user_id, account_type, datetime.now().isoformat()))
+            cur.execute("INSERT INTO accounts (user_id, account_type, created_at, nickname) VALUES (?, ?, ?)",
+                        (user_id, account_type, datetime.now().isoformat(), nickname))
             account_id = cur.lastrowid
 
             return {
                 'account_id': account_id,
                 'user_id': user_id,
-                'account_type': account_type
+                'account_type': account_type,
+                'nickname': nickname
             }
 
     @staticmethod
