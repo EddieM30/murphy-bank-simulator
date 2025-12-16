@@ -35,16 +35,19 @@ class UserManager:
             user = cur.fetchone()
             # Check 1 -- does user exist?
             if user is None:
+                print('check 1')
                 return None
 
             # check 2 -- is user active?
             if user['status'] != 'active':
+                print('check 2')
                 return None
 
             # Check 3 -- do passwords match?
-            password_hash = hashlib.sha256(
-                password.encode('utf-8')).hexdigest()
+            print(password_hash)
+            print(user['password'])
             if password_hash == user['password']:
+                print('check 3')
                 return {
                     'user_id': user['user_id'],
                     'username': user['username'],
@@ -53,6 +56,7 @@ class UserManager:
                     'email': user['email']
                 }
             # if hashes don't match return None
+            print('this')
             return None
 
     @staticmethod

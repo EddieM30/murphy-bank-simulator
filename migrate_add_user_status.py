@@ -21,6 +21,3 @@ def migrate():
             print('Closed_at column added to users')
         else:
             print("closed_at column already exists")
-
-
-migrate()

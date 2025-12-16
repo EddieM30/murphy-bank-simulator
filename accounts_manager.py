@@ -87,26 +87,44 @@ class AccountsManager():
 
     @staticmethod
     def transfer(user_id, from_account_id, to_account_id, to_user_id, amount):
-        from_account = AccountsManager.get_account(user_id, from_account_id)
-        to_account = AccountsManager.get_account(to_user_id, to_account_id)
-        from_account_balance = Decimal(from_account['balance'])
-        to_account_balance = Decimal(to_account['balance'])
+
+        amount_str = str(amount)
+
         with get_connection() as conn:
             cur = conn.cursor()
-            cur.execute("""UPDATE
-                        SET balance = ?
-                        WHERE user_id = ? AND account_id = ?
-                        RETURNING *""",
-                        (str(from_account_balance - amount), user_id, from_account_id))
-            sent_from = dict(cur.fetchone())
-            cur.execute("""UPDATE
-                        SET balance = ?
-                        WHERE user_id = ? AND account_id = ?
-                        RETURNING *""",
-                        (str(to_account_balance + amount), to_user_id, to_account_id))
-            reciever = dict(cur.fetchone())
+            try:
+                cur.execute('BEGIN')
+                cur.execute("""UPDATE accounts
+                            SET balance = balance - ?
+                            WHERE user_id = ? AND account_id = ? AND balance >= ?
+                            RETURNING *""",
+                            (amount_str, user_id, from_account_id, amount_str))
 
-        return sent_from, reciever
+                updated_from = cur.fetchone()
+                if updated_from is None:
+                    raise Exception(
+                        "Insufficient funds or invalid source account")
+
+                updated_from_dict = dict(updated_from)
+
+                cur.execute("""UPDATE accounts
+                            SET balance = balance + ?
+                            WHERE user_id = ? AND account_id = ?
+                            RETURNING *""",
+                            (amount_str, to_user_id, to_account_id, amount_str))
+
+                updated_to = cur.fetchone()
+                if updated_to is None:
+                    raise Exception("Invalid destination account")
+                updated_to_dict = dict(updated_to)
+
+                conn.commit()
+
+                return updated_from_dict, updated_to_dict
+            except Exception as e:
+                conn.rollback()
+                print(f'Transfer failed: {e}')
+                return None
 
     @staticmethod
     def close_account(user_id, account_id):

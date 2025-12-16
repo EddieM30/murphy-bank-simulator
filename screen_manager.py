@@ -42,6 +42,8 @@ class ScreensManager:
                     ScreensManager.user_login()
                 if user_input == 3:
                     sys.exit(0)
+                if user_input < 0 or user_input > 3:
+                    input('Invalid menu option\nPress enter to continue...')
             except ValueError:
                 input('Invalid input.\nPress enter to continue...')
 
@@ -67,7 +69,7 @@ class ScreensManager:
                 if validate_names is True:
                     break
 
-            while True:
+            while True:  # needs length check cant be empty
                 username = input('\nUsername: ')
                 if username.lower() == 'n':
                     return
@@ -77,7 +79,7 @@ class ScreensManager:
                     continue
                 break
 
-            while True:
+            while True:  # Needs checks for @ and .com to be valid email, length check
                 email = input('\nEmail: ')
                 if email.lower() == 'n':
                     return
@@ -95,19 +97,19 @@ class ScreensManager:
                 verify_password = input('\nType password again: ')
                 if verify_password == 'n':
                     return
-                result = InputManager.validate_password(password=password)
+                result = InputManager.validate_password(
+                    password=password)  # needs fail message
                 if password != verify_password:
                     print('\nPasswords did not match...')
                     continue
                 if result is True:
-                    password_hash = hashlib.sha256(
-                        password.encode()).hexdigest()
+
                     break
 
                 continue
 
             UserManager.create(username, last_name.upper(),
-                               first_name, password_hash, email)
+                               first_name, password, email)
             input(
                 f'Congratulations {first_name}, you just made an account with the bank.\nUsername: {username}\nEmail: {email}\n\nPress enter to continue to login...')
             return
@@ -124,15 +126,18 @@ class ScreensManager:
             password = input('\nPassword: ')
             if password == 'n':
                 return
-            user = UserManager.get_by_username(username=username)
+
+            user = UserManager.authenticate(username, password)
             if user is None:
                 input(
                     'Invalid username or password. Try again.\nPress enter to continue...')
                 continue
+            utils.clear_console()
 
             current_session = ScreensManager(
                 user['username'], user['user_id'], user['last_name'].title(), user['first_name'], user['email'])
             ScreensManager.dashboard(current_session=current_session)
+            input('Incorrect password.\nPress enter to continue...')
 
     @staticmethod
     def dashboard(current_session):
