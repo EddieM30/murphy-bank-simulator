@@ -146,13 +146,14 @@ class ScreensManager:
             accounts = AccountsManager.list_account(current_session.user_id)
             if len(accounts) == 0:  # if no accounts forces account creation
                 ScreensManager.create_account(current_session)
+                continue
 
             print('=== User Menu ===\n')
             print(f'Welcome, {current_session.first_name}\n')
 
             for i, account in enumerate(accounts):
                 print(
-                    f'{account['account_type'].title()} balance: {account['balance']}\n')
+                    f'{account['account_nickname']}{account['account_type'].title()} balance: ${account['balance']:,.2f}\n')
 
             options = ['Deposit', 'Withdraw', 'Transfer',
                        'Open new account', 'Logout of session']
@@ -172,6 +173,7 @@ class ScreensManager:
                 return
 
     @staticmethod
+    # returns to stale dashboard upon first account creation but none after that
     def create_account(current_session):
         while True:
             utils.clear_console()
