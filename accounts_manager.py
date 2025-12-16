@@ -23,7 +23,7 @@ class AccountsManager():
         """Create one new account (checking, savings, etc.) one method infinitly extensible"""
         with get_connection() as conn:
             cur = conn.cursor()
-            cur.execute("INSERT INTO accounts (user_id, account_type, created_at, nickname) VALUES (?, ?, ?)",
+            cur.execute("INSERT INTO accounts (user_id, account_type, created_at, account_nickname) VALUES (?, ?, ?, ?)",
                         (user_id, account_type, datetime.now().isoformat(), nickname))
             account_id = cur.lastrowid
 
@@ -31,7 +31,7 @@ class AccountsManager():
                 'account_id': account_id,
                 'user_id': user_id,
                 'account_type': account_type,
-                'nickname': nickname
+                'account_nickname': nickname
             }
 
     @staticmethod

@@ -185,15 +185,17 @@ class ScreensManager:
             if choice == 'n':
                 return
             if int(choice) == 1:
-                nickname = input('A nickname is needed for this account: ')
+                nickname = input('\nA nickname is needed for this account: ')
                 AccountsManager.create_account(
                     current_session.user_id, 'checking', nickname)
                 return
             if int(choice) == 2:
+                nickname = input('\nA nickname is needed for this account: ')
                 AccountsManager.create_account(
                     current_session.user_id, 'savings', nickname)
                 return
             if int(choice) == 3:
+                nickname = input('\nA nickname is needed for this account: ')
                 AccountsManager.create_account(
                     current_session.user_id, 'credit', nickname)
                 return
