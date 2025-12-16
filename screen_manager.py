@@ -4,6 +4,7 @@ import utils  # all utility methods
 from user_manager import UserManager
 from input_manager import InputManager
 from accounts_manager import AccountsManager
+from decimal import Decimal
 
 
 class ScreensManager:
@@ -45,7 +46,7 @@ class ScreensManager:
                 if user_input < 0 or user_input > 3:
                     input('Invalid menu option\nPress enter to continue...')
             except ValueError:
-                input('Invalid input.\nPress enter to continue...')
+                input('Invalid input.\ndebug\nPress enter to continue...')
 
     @staticmethod
     def create_user():
@@ -103,9 +104,7 @@ class ScreensManager:
                     print('\nPasswords did not match...')
                     continue
                 if result is True:
-
                     break
-
                 continue
 
             UserManager.create(username, last_name.upper(),
@@ -151,26 +150,31 @@ class ScreensManager:
             print('=== User Menu ===\n')
             print(f'Welcome, {current_session.first_name}\n')
 
-            for i, account in enumerate(accounts):
+            for account in reversed(accounts):
+                deci_bal = Decimal(account['balance'])
                 print(
-                    f'{account['account_nickname']}{account['account_type'].title()} balance: ${account['balance']:,.2f}\n')
+                    f'{account['account_nickname']} {account['account_type'].title()} balance: ${deci_bal:,.2f}\n')
 
             options = ['Deposit', 'Withdraw', 'Transfer',
                        'Open new account', 'Logout of session']
             for i, option in enumerate(options):
                 print(f'{i + 1}. {option}')
-            choice = int(input('\nWhat would you like to do? '))
-            if choice == 1:
-                ScreensManager.deposit_menu(current_session)
-            if choice == 2:
-                ScreensManager.withdraw_menu(current_session)
-            if choice == 3:
-                ScreensManager.transfer_menu(current_session)
-            if choice == 4:
-                ScreensManager.create_account(current_session)
-            if choice == 5:
-                current_session = None
-                return
+            try:
+                choice = int(input('\nWhat would you like to do? '))
+                if choice == 1:
+                    ScreensManager.deposit_menu(current_session)
+                if choice == 2:
+                    ScreensManager.withdraw_menu(current_session)
+                if choice == 3:
+                    ScreensManager.transfer_menu(current_session)
+                if choice == 4:
+                    ScreensManager.create_account(current_session)
+                if choice == 5:
+                    current_session = None
+                    return
+            except ValueError:
+                input('Invalid input.\nPress enter to continue...')
+                continue
 
     @staticmethod
     # returns to stale dashboard upon first account creation but none after that
@@ -207,7 +211,25 @@ class ScreensManager:
         while True:
             utils.clear_console()
             print('=== DEPOSIT ===\n')
-            str_deposit_amount = input('')
+            print(
+                f'Hey, {current_session.first_name}! Which account are we depositing too?\n')
+            accounts = AccountsManager.list_account(current_session.user_id)
+            for i, account in enumerate(accounts):
+                print(f'{i + 1}. {account['account_nickname']}\n')
+            try:
+                choice = int(input(
+                    'Please use the number value corrosponding with the account you wish to access: '))
+                if str(choice) == 'n':
+                    return
+                if choice > len(accounts) or choice < len(accounts):
+                    continue
+                update_account = accounts[int(choice) - 1]
+                amount = input(
+                    'Please enter the amount you wish to deposit (0.00): ')
+            except ValueError:
+                input('Invalid menu option.\nPress enter to continue...')
+
+            input('Testing')
 
     @staticmethod
     def withdraw_menu(current_session):

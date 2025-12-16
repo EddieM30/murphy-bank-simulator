@@ -55,7 +55,7 @@ class AccountsManager():
     @staticmethod
     def deposit(user_id: int, account_id: int, amount: Decimal) -> dict | None:
         """Deposits money into users account"""
-        account = AccountsManager.get_account(user_id, account_id)
+        account = AccountsManager.get_account(user_id, account_id, nickname)
         curr_balance = Decimal(account['balance'])
         updated_balance = curr_balance + amount
         with get_connection() as conn:
@@ -72,7 +72,7 @@ class AccountsManager():
     @staticmethod
     def withdraw(user_id, account_id, amount):
         '''Withdraw money from user account'''
-        account = AccountsManager.get_account(user_id, account_id)
+        account = AccountsManager.get_account(user_id, account_id, nickname)
         curr_balance = Decimal(account['balance'])
         updated_balance = curr_balance - amount
         with get_connection() as conn:
