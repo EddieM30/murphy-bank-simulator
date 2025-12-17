@@ -6,7 +6,7 @@ from utilities.utils import clear_console
 
 class MainMenu:
 
-    def show(self):
+    def show(self, router):
         while True:
             clear_console()
             options = ['New User', 'Existing User', 'Exit']
@@ -19,15 +19,12 @@ class MainMenu:
             try:
                 user_input = int(input('\nWhat would you like to do?: '))
                 if user_input == 1:
-                    UserRegistration.show(self)
+                    return 'register'
                 if user_input == 2:
-                    UserLogin.show(self)
+                    return 'login'
                 if user_input == 3:
-                    sys.exit(0)
+                    return 'exit'
                 if user_input < 0 or user_input > 3:
                     input('Invalid menu option\nPress enter to continue...')
             except ValueError:
                 input('Invalid input.\ndebug\nPress enter to continue...')
-
-
-MainMenu().show()
