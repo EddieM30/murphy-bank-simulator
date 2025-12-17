@@ -1,10 +1,10 @@
 import sys
 import hashlib
-import utils  # all utility methods
-from user_manager import UserManager
-from input_manager import InputManager
-from accounts_manager import AccountsManager
 from decimal import Decimal
+import utilities.utils as utils  # all utility methods
+from managers.user_manager import UserManager
+from managers.input_manager import InputManager
+from managers.accounts_manager import AccountsManager
 
 
 class ScreensManager:
@@ -218,18 +218,28 @@ class ScreensManager:
                 print(f'{i + 1}. {account['account_nickname']}\n')
             try:
                 choice = int(input(
-                    'Please use the number value corrosponding with the account you wish to access: '))
-                if str(choice) == 'n':
+                    'Please use the number value corrosponding with the account you wish to access (0 to cancel): '))
+                if choice == 0:
                     return
                 if choice > len(accounts) or choice < len(accounts):
                     continue
                 update_account = accounts[int(choice) - 1]
                 amount = input(
                     'Please enter the amount you wish to deposit (0.00): ')
+                if amount == 'n':
+                    return
             except ValueError:
                 input('Invalid menu option.\nPress enter to continue...')
+                continue
 
-            input('Testing')
+            decimal_amount = InputManager.clean_money_amount(amount)
+            if decimal_amount is None:
+                input('False...')
+                continue
+
+            AccountsManager.deposit(
+                current_session.user_id, update_account['account_id'], decimal_amount)
+            return
 
     @staticmethod
     def withdraw_menu(current_session):

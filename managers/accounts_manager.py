@@ -74,10 +74,12 @@ class AccountsManager():
         '''Withdraw money from user account'''
         account = AccountsManager.get_account(user_id, account_id)
         curr_balance = Decimal(account['balance'])
+        if amount > curr_balance:
+            return None
         updated_balance = curr_balance - amount
         with get_connection() as conn:
             cur = conn.cursor()
-            cur.execute('''UPDATE accounts 
+            cur.execute('''UPDATE accounts
                         SET balance = ? 
                         WHERE user_id = ? AND account_id = ? 
                         RETURNING *

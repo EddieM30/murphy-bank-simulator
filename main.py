@@ -1,4 +1,4 @@
-from screen_manager import ScreensManager
+from managers.screen_manager import ScreensManager
 from database import initialize_databases
 import migrate_add_user_status
 
