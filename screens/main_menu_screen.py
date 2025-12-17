@@ -1,10 +1,14 @@
+import sys
 from screens.user_registration_screen import UserRegistration
+from screens.user_login_screen import UserLogin
+from utilities.utils import clear_console
 
 
 class MainMenu:
+
     def show(self):
         while True:
-            utils.clear_console()
+            clear_console()
             options = ['New User', 'Existing User', 'Exit']
 
             print(
@@ -17,10 +21,13 @@ class MainMenu:
                 if user_input == 1:
                     UserRegistration.show(self)
                 if user_input == 2:
-                    ScreensManager.user_login()
+                    UserLogin.show(self)
                 if user_input == 3:
                     sys.exit(0)
                 if user_input < 0 or user_input > 3:
                     input('Invalid menu option\nPress enter to continue...')
             except ValueError:
                 input('Invalid input.\ndebug\nPress enter to continue...')
+
+
+MainMenu().show()
