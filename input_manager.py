@@ -1,3 +1,4 @@
+from decimal import Decimal, InvalidOperation
 
 
 class InputManager:
@@ -22,3 +23,21 @@ class InputManager:
         if len(password) >= 8:
             return True
         return False
+
+    @staticmethod
+    def clean_money_amount(raw_amount: str) -> Decimal | None:
+        cleaned_amount = raw_amount.strip().replace('$', '').replace(',', '')
+        if '.' in cleaned_amount:
+            whole, cents = cleaned_amount.split('.')
+            if len(cents) > 2:
+                input(
+                    'Cents cannot have a greater value than .99\nPress enter to continue...')
+                return None
+        try:
+            decimal_amount = Decimal(cleaned_amount)
+            print(decimal_amount)
+            return decimal_amount
+        except InvalidOperation as e:
+            print(f'Invalid operation: {e}')
+            print("The input could not be converted to a valid Decimal number.")
+            return None
