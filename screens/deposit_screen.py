@@ -40,4 +40,4 @@ class DepositScreen:
 
             AccountsManager.deposit(
                 current_session['user_id'], update_account['account_id'], decimal_amount)
-            return
+            return 'dashboard'
