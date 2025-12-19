@@ -1,12 +1,9 @@
-import sys
-from screens.user_registration_screen import UserRegistration
-from screens.user_login_screen import UserLogin
 from utilities.utils import clear_console
 
 
 class MainMenu:
 
-    def show(self, router):
+    def show(self):
         while True:
             clear_console()
             options = ['New User', 'Existing User', 'Exit']

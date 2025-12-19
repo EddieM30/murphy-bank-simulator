@@ -1,11 +1,11 @@
 from utilities.utils import clear_console
 from managers.user_manager import UserManager
-from managers.screen_manager import ScreensManager
-from main import router
-from .router import ScreenRouter
 
 
 class UserLogin:
+    def __init__(self, router):
+        self.router = router
+
     def show(self):
         while True:
             clear_console()
@@ -25,5 +25,6 @@ class UserLogin:
                 continue
             clear_console()
 
-            router.current_session = user
+            self.router.set_session(user)
+
             return 'dashboard'

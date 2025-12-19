@@ -13,10 +13,10 @@ class UserRegistration:
             while True:
                 first_name = input('\nFirst Name: ').strip()
                 if first_name.lower() == 'n':
-                    return 'main'
+                    return
                 last_name = input('\nLast Name: ').strip()
                 if last_name.lower() == 'n':
-                    return 'main'
+                    return
                 validate_names = InputManager.validate_name(
                     first_name, last_name)
                 if validate_names is False:
@@ -28,7 +28,7 @@ class UserRegistration:
             while True:  # needs length check cant be empty
                 username = input('\nUsername: ')
                 if username.lower() == 'n':
-                    return 'main'
+                    return
                 result = UserManager.username_exists(username=username)
                 if result is True:  # does exist is True
                     print(f'Username: {username} is already taken.')
@@ -38,7 +38,7 @@ class UserRegistration:
             while True:  # Needs checks for @ and .com to be valid email, length check
                 email = input('\nEmail: ')
                 if email.lower() == 'n':
-                    return 'main'
+                    return
                 result = UserManager.email_exists(
                     email=email)
                 if result is True:  # does exist is True
@@ -49,7 +49,7 @@ class UserRegistration:
             while True:
                 password = input('\nPasword (8 or more characters): ')
                 if password == 'n':
-                    return 'main'
+                    return
                 verify_password = input('\nType password again: ')
                 if verify_password == 'n':
                     return 'main'
@@ -66,4 +66,4 @@ class UserRegistration:
                                first_name, password, email)
             input(
                 f'Congratulations {first_name}, you just made an account with the bank.\nUsername: {username}\nEmail: {email}\n\nPress enter to continue to login...')
-            return 'main'
+            return

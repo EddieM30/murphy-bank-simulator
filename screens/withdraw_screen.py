@@ -1,3 +1,8 @@
 class WithdrawScreen:
+    def __init__(self, router):
+        self.router = router
+
     def show(self):
-        pass
+        while True:
+            input('withdraw')
+            return
