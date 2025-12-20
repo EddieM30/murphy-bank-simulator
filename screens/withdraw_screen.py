@@ -1,6 +1,6 @@
 from managers.accounts_manager import AccountsManager
-from utilities.utils import clear_console
 from managers.input_manager import InputManager
+from utilities.utils import clear_console
 
 
 class WithdrawScreen:
