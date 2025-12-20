@@ -35,7 +35,6 @@ class InputManager:
                 return None
         try:
             decimal_amount = Decimal(cleaned_amount)
-            print(decimal_amount)
             return decimal_amount
         except InvalidOperation as e:
             print(f'Invalid operation: {e}')

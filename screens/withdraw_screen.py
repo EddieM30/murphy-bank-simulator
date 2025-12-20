@@ -33,7 +33,6 @@ class WithdrawScreen:
             except ValueError:
                 input('Invalid menu option.\nPress enter to continue...')
                 continue
-
             decimal_amount = InputManager.clean_money_amount(amount)
             if decimal_amount is None:
                 input('False...')
@@ -43,4 +42,5 @@ class WithdrawScreen:
                 current_session['user_id'], update_account['account_id'], decimal_amount)
             if next_action is None:
                 input('Something went wrong, try again...')
+                continue
             return 'dashboard'
