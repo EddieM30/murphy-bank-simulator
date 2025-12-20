@@ -75,6 +75,7 @@ class AccountsManager():
         account = AccountsManager.get_account(user_id, account_id)
         curr_balance = Decimal(account['balance'])
         if amount > curr_balance:
+            print('You are attempting to withdraw more than your current balance.')
             return None
         updated_balance = curr_balance - amount
         with get_connection() as conn:

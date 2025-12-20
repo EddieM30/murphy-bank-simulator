@@ -1,8 +1,46 @@
+from managers.accounts_manager import AccountsManager
+from utilities.utils import clear_console
+from managers.input_manager import InputManager
+
+
 class WithdrawScreen:
     def __init__(self, router):
         self.router = router
 
     def show(self):
         while True:
-            input('withdraw')
-            return
+            clear_console()
+            current_session = self.router.get_session()
+            print('=== Withdraw ===\n')
+            print(
+                f'Hey, {current_session['first_name']}! Which account are we withdrawing money from?\n')
+            accounts = AccountsManager.list_account(current_session['user_id'])
+            for i, account in enumerate(accounts):
+                print(f'{i + 1}. {account['account_nickname']}\n')
+            try:
+                choice = int(input(
+                    'Please use the number value corrosponding with the account you wish to access (0 to cancel): '))
+                if choice == 0:
+                    return 'dashboard'
+                if choice < 0 or choice > len(accounts):
+                    continue
+
+                update_account = accounts[int(choice) - 1]
+                amount = input(
+                    'Please enter the amount you wish to withdraw (0.00): ')
+                if amount == 'n':
+                    return
+            except ValueError:
+                input('Invalid menu option.\nPress enter to continue...')
+                continue
+
+            decimal_amount = InputManager.clean_money_amount(amount)
+            if decimal_amount is None:
+                input('False...')
+                continue
+
+            next_action = AccountsManager.withdraw(
+                current_session['user_id'], update_account['account_id'], decimal_amount)
+            if next_action is None:
+                input('Something went wrong, try again...')
+            return 'dashboard'
