@@ -22,8 +22,9 @@ class DepositScreen:
                     'Please use the number value corrosponding with the account you wish to access (0 to cancel): '))
                 if choice == 0:
                     return 'dashboard'
-                if choice > len(accounts) or choice < len(accounts):
+                if choice < 0 or choice > len(accounts):
                     continue
+
                 update_account = accounts[int(choice) - 1]
                 amount = input(
                     'Please enter the amount you wish to deposit (0.00): ')

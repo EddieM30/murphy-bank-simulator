@@ -13,10 +13,10 @@ class UserLogin:
             print('\nInput "n" anywhere to return to main menu.')
             username = input('\nUsername: ')
             if username.lower() == 'n':
-                return
+                return 'main'
             password = input('\nPassword: ')
             if password == 'n':
-                return
+                return 'main'
 
             user = UserManager.authenticate(username, password)
             if user is None:

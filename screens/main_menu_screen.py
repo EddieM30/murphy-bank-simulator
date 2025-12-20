@@ -2,6 +2,8 @@ from utilities.utils import clear_console
 
 
 class MainMenu:
+    def __init__(self, router):
+        self.router = router
 
     def show(self):
         while True:

@@ -29,7 +29,7 @@ class ScreenRouter:
     def run(self):
         while True:
             if self.current_screen is None:
-                self.current_screen = MainMenu()
+                self.current_screen = MainMenu(self)
 
             next_action = self.current_screen.show()
             if next_action == 'register':
