@@ -23,7 +23,7 @@ class UserDashboard:
                 print(
                     f'{account['account_nickname']} {account['account_type'].title()} balance: ${deci_bal:,.2f}\n')
 
-            options = ['Deposit', 'Withdraw', 'Transfer',
+            options = ['Deposit', 'Withdraw', 'Send money outside of account', 'Transfer money between your accounts',
                        'Open new account', 'Logout of session']
             for i, option in enumerate(options):
                 print(f'{i + 1}. {option}')
@@ -34,10 +34,12 @@ class UserDashboard:
                 if choice == 2:
                     return 'withdraw'
                 if choice == 3:
-                    return 'transfer'
+                    return 'send money'
                 if choice == 4:
-                    return 'create account'
+                    return 'transfer'
                 if choice == 5:
+                    return 'create account'
+                if choice == 6:
                     return 'logout'
 
             except ValueError:

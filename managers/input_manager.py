@@ -38,5 +38,5 @@ class InputManager:
             return decimal_amount
         except InvalidOperation as e:
             print(f'Invalid operation: {e}')
-            print("The input could not be converted to a valid Decimal number.")
+            input("The input could not be converted to a valid Decimal number.")
             return None

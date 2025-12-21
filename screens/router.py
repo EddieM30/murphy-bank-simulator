@@ -1,4 +1,5 @@
 import sys
+from .send_money import SendMoney
 from .account_creation import AccountCreation
 from .deposit_screen import DepositScreen
 from .main_menu_screen import MainMenu
@@ -48,6 +49,8 @@ class ScreenRouter:
                 self.current_screen = UserDashboard(self)
             elif next_action == 'withdraw':
                 self.current_screen = WithdrawScreen(self)
+            elif next_action == 'send money':
+                self.current_screen = SendMoney(self)
             elif self.current_screen == 'exit':
                 sys.exit(0)
             else:
