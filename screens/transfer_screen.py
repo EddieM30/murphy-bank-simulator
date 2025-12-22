@@ -46,3 +46,8 @@ class TransferScreen:
                 if deci_amount is None:
                     print(deci_amount)
                     continue
+                print(current_session['user_id'], from_account['account_id'],
+                      current_session['user_id'], to_account['account_id'])
+                input('cont...')
+                AccountsManager.transfer(
+                    current_session['user_id'], from_account['account_id'], current_session['user_id'], to_account['account_id'], deci_amount)

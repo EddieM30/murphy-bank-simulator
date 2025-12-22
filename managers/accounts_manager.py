@@ -115,7 +115,7 @@ class AccountsManager():
                             SET balance = balance + ?
                             WHERE user_id = ? AND account_id = ?
                             RETURNING *""",
-                            (amount_str, to_user_id, to_account_id, amount_str))
+                            (amount_str, to_user_id, to_account_id))
 
                 updated_to = cur.fetchone()
                 if updated_to is None:
@@ -137,3 +137,7 @@ class AccountsManager():
     @staticmethod
     def validate_money(amount: str) -> Decimal | None:
         '''Normalizes user input to be used by the the core banking logic'''
+
+
+user = AccountsManager.transfer(2, 5, 2, 3, 500)
+print(user)
