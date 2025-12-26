@@ -90,37 +90,50 @@ class AccountsManager():
         return dict(row) if row else None
 
     @staticmethod
-    def transfer(user_id, from_account_id, to_account_id, to_user_id, amount):
+    def transfer(user_id, from_account_id, to_user_id, to_account_id, amount):
 
-        amount_str = str(amount)
+        from_account_balance = Decimal(
+            AccountsManager.get_account(user_id, from_account_id)['balance'])
+        print(from_account_balance)
+        to_account_balance = Decimal((AccountsManager.get_account(
+            to_user_id, to_account_id)['balance']))
+        print(to_account_balance)
+        if from_account_balance < amount:
+            input('Insufficient funds.')
+            return None
+        from_account_balance -= amount
+        to_account_balance += amount
 
         with get_connection() as conn:
             cur = conn.cursor()
             try:
                 cur.execute('BEGIN')
                 cur.execute("""UPDATE accounts
-                            SET balance = balance - ?
-                            WHERE user_id = ? AND account_id = ? AND balance >= ?
+                            SET balance = ?
+                            WHERE user_id = ? AND account_id = ?
                             RETURNING *""",
-                            (amount_str, user_id, from_account_id, amount_str))
+                            (str(from_account_balance), user_id, from_account_id))
 
                 updated_from = cur.fetchone()
+                print(updated_from)
                 if updated_from is None:
                     raise Exception(
                         "Insufficient funds or invalid source account")
 
                 updated_from_dict = dict(updated_from)
+                print(updated_from_dict)
 
                 cur.execute("""UPDATE accounts
-                            SET balance = balance + ?
+                            SET balance = ?
                             WHERE user_id = ? AND account_id = ?
                             RETURNING *""",
-                            (amount_str, to_user_id, to_account_id))
+                            (str(to_account_balance), to_user_id, to_account_id))
 
                 updated_to = cur.fetchone()
                 if updated_to is None:
                     raise Exception("Invalid destination account")
                 updated_to_dict = dict(updated_to)
+                print(updated_to_dict)
 
                 conn.commit()
 
@@ -137,7 +150,3 @@ class AccountsManager():
     @staticmethod
     def validate_money(amount: str) -> Decimal | None:
         '''Normalizes user input to be used by the the core banking logic'''
-
-
-user = AccountsManager.transfer(2, 5, 2, 3, 500)
-print(user)
